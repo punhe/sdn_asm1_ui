@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import QuizForm from './QuizForm';
 
 const QuizList = ({ quizzes, onQuizDeleted, onSelectQuiz }) => {
@@ -34,7 +34,7 @@ const QuizList = ({ quizzes, onQuizDeleted, onSelectQuiz }) => {
             </span>
             <div>
               <button
-                className="btn btn-primary btn-sm me-2" // Nút chọn quiz
+                className="btn btn-primary btn-sm me-2"
                 onClick={() => handleSelectQuiz(quiz)}
               >
                 Select
@@ -49,8 +49,7 @@ const QuizList = ({ quizzes, onQuizDeleted, onSelectQuiz }) => {
           </li>
         ))}
       </ul>
-
-      <QuizForm onQuizCreated={onSelectQuiz} /> {/* Hiển thị form tạo quiz */}
+      <QuizForm onQuizCreated={onSelectQuiz} />
     </div>
   );
 };

@@ -18,7 +18,7 @@ const QuestionForm = ({ quizId, onQuestionCreated }) => {
         }),
       });
       if (!response.ok) throw new Error('Failed to create question');
-      
+
       setText('');
       setOptions(['', '', '', '']);
       setCorrectAnswerIndex(0);

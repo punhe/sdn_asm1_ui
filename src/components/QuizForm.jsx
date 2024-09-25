@@ -13,7 +13,7 @@ const QuizForm = ({ onQuizCreated }) => {
         body: JSON.stringify({ title, description }),
       });
       if (!response.ok) throw new Error('Failed to create quiz');
-      
+
       setTitle('');
       setDescription('');
       onQuizCreated();

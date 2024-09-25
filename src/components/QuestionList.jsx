@@ -25,8 +25,8 @@ const QuestionList = ({ quizId }) => {
             <h5>{question.text}</h5>
             <ul className="list-group mt-2">
               {question.options.map((option, index) => (
-                <li 
-                  key={index} 
+                <li
+                  key={index}
                   className={`list-group-item ${index === question.correctAnswerIndex ? 'bg-success text-white' : ''}`}
                 >
                   {option}
