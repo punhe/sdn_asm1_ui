@@ -1,23 +1,29 @@
-import React, { useState } from 'react'; 
-import QuizForm from './QuizForm';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-const QuizList = ({ quizzes, onQuizDeleted, onSelectQuiz }) => {
-  const [selectedQuiz, setSelectedQuiz] = useState(null);
+const QuizList = () => {
+  const [quizzes, setQuizzes] = useState([]);
 
-  const handleSelectQuiz = (quiz) => {
-    setSelectedQuiz(quiz);
-    onSelectQuiz(quiz);
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  const fetchQuizzes = async () => {
+    try {
+      const response = await fetch('https://sdn-asm1.onrender.com/quizzes');
+      const data = await response.json();
+      setQuizzes(data);
+    } catch (error) {
+      console.error('Error fetching quizzes:', error);
+    }
   };
 
-  const handleDeleteQuiz = async (quizId) => {
+  const handleDelete = async (id) => {
     try {
-      const response = await fetch(`https://sdn-asm1.onrender.com/quizzes/${quizId}`, {
+      await fetch(`https://sdn-asm1.onrender.com/quizzes/${id}`, {
         method: 'DELETE',
       });
-      if (response.ok) {
-        onQuizDeleted(quizId);
-        setSelectedQuiz(null);
-      }
+      fetchQuizzes(); // Refresh the list after deletion
     } catch (error) {
       console.error('Error deleting quiz:', error);
     }
@@ -25,31 +31,30 @@ const QuizList = ({ quizzes, onQuizDeleted, onSelectQuiz }) => {
 
   return (
     <div>
-      <h2 className="mb-3">Quizzes</h2>
-      <ul className="list-group mb-3">
-        {quizzes.map((quiz) => (
-          <li key={quiz._id} className="list-group-item d-flex justify-content-between align-items-center">
-            <span className="flex-grow-1 cursor-pointer" onClick={() => handleSelectQuiz(quiz)}>
-              {quiz.title}
-            </span>
-            <div>
-              <button
-                className="btn btn-primary btn-sm me-2"
-                onClick={() => handleSelectQuiz(quiz)}
-              >
-                Select
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => handleDeleteQuiz(quiz._id)}
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <QuizForm onQuizCreated={onSelectQuiz} />
+      <h2>List of Quizzes</h2>
+      <Link to="/quizzes/new" className="btn btn-primary mb-3">Create New Quiz</Link>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {quizzes.map((quiz) => (
+            <tr key={quiz._id}>
+              <td>{quiz.title}</td>
+              <td>{quiz.description}</td>
+              <td>
+                <Link to={`/quizzes/${quiz._id}`} className="btn btn-sm btn-info me-2">View</Link>
+                <Link to={`/quizzes/${quiz._id}/edit`} className="btn btn-sm btn-primary me-2">Edit</Link>
+                <button onClick={() => handleDelete(quiz._id)} className="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
